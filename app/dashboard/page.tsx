@@ -16,7 +16,7 @@ const initialCards: Cards[] = [
 
 const Dashboard = () => {
   const [cards, setCards] = useState<Cards[]>(initialCards);
-  const [draggedCardId, setDraggedCardId] = useState<any>(null);
+  const [draggedCardId, setDraggedCardId] = useState<number>(null);
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [newSection, setNewSection] = useState("");
