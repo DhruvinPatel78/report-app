@@ -12,8 +12,8 @@ interface CardContainerProps {
   onDragStart: (event: React.DragEvent<HTMLDivElement>, index: number) => void;
   onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (event: React.DragEvent<HTMLDivElement>, index: number) => void;
-  currentId: string;
-  onClick: (card: Card) => void;
+  currentId: number;
+  onClick: (id: number, key: number) => void | any;
 }
 
 const CardContainer: React.FC<CardContainerProps> = ({
@@ -26,7 +26,7 @@ const CardContainer: React.FC<CardContainerProps> = ({
 }) => {
   return (
     <div className="w-full overflow-auto">
-      {cards.map((card:Card, index:number) => {
+      {cards.map((card: Card, index: number) => {
         return (
           <DraggableCard
             key={card.id}

@@ -110,7 +110,7 @@ const Dashboard = () => {
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDrop={onDrop}
-          currentId={currentId}
+          currentId={currentId as number}
           onClick={handleCardClick}
         />
         <div className="m-4 flex flex-col gap-4">
