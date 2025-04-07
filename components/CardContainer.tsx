@@ -1,9 +1,22 @@
+import React from "react";
 import DraggableCard from "./DraggableCard";
+
+// Define the type for a card object
 interface Card {
   id: number;
   title: string;
 }
-const CardContainer = ({
+
+interface CardContainerProps {
+  cards: Card[];
+  onDragStart: (event: React.DragEvent<HTMLDivElement>, index: number) => void;
+  onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDrop: (event: React.DragEvent<HTMLDivElement>, index: number) => void;
+  currentId: string;
+  onClick: (card: Card) => void;
+}
+
+const CardContainer: React.FC<CardContainerProps> = ({
   cards,
   onDragStart,
   onDragOver,
@@ -13,7 +26,7 @@ const CardContainer = ({
 }) => {
   return (
     <div className="w-full overflow-auto">
-      {cards.map((card:Card, index:number) => {
+      {cards.map((card, index) => {
         return (
           <DraggableCard
             key={card.id}
