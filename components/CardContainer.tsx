@@ -13,7 +13,7 @@ interface CardContainerProps {
   onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (event: React.DragEvent<HTMLDivElement>, index: number) => void;
   currentId: number;
-  onClick: (id: number, key: number) => void | any;
+  onClick: (id: number, key: number) => void ;
 }
 
 const CardContainer: React.FC<CardContainerProps> = ({
