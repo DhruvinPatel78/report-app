@@ -8,7 +8,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
 import {
@@ -49,14 +49,15 @@ export type User = {
   name: string;
   email: string;
   avatar?: string;
+  icon?: LucideIcon;
 };
-export const getFallbackName = (name: any): string => {
-  const initials: any = name
+export const getFallbackName = (name: string): string => {
+  const initials: string | undefined = name
     ?.split(" ")
     ?.map((word) => word.charAt(0))
     .join("");
 
-  return initials?.toUpperCase();
+  return initials?.toUpperCase() as string;
 };
 export function NavMain({
   items,
@@ -65,7 +66,7 @@ export function NavMain({
 }: {
   items: NavItem[];
   user?: User;
-  title?: any;
+  title?: string;
 }) {
   const router = useRouter();
   const { isMobile } = useSidebar();
@@ -83,14 +84,15 @@ export function NavMain({
     );
   };
 
-  const renderNavItems: any = (items: NavItem[], depth = 0) =>
-    items.map((item: any) => {
-      const isActive: any = isItemActive(item);
-      const isExpanded: any = expandedSections.includes(item.title);
-      const hasSubItems: any = item.items && item.items.length > 0;
-      const isExpandable: any =
+  const renderNavItems = (items: NavItem[], depth = 0) =>
+    items.map((item) => {
+      const isActive: boolean = isItemActive(item);
+      const isExpanded: boolean = expandedSections.includes(item.title);
+      const hasSubItems: boolean | undefined =
+        item.items && item.items.length > 0;
+      const isExpandable: boolean =
         hasSubItems || item.url === "#" || item.url === "";
-      const fontSizeClass: any = cn({
+      const fontSizeClass: string = cn({
         "text-sm": depth === 0 || depth === 1,
         "text-[0.80rem]": depth > 1,
       });
@@ -185,7 +187,7 @@ export function NavMain({
         </SidebarMenuItem>
       );
     });
-  const renderUser: any = (user: any) => {
+  const renderUser:(user: User) => (null | React.JSX.Element) = (user:User) => {
     if (!user) return null;
     return (
       <SidebarMenuItem>
@@ -198,7 +200,7 @@ export function NavMain({
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback className="rounded-lg">
-                  {getFallbackName(user?.name)}
+                  {getFallbackName(user?.name as string)}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">

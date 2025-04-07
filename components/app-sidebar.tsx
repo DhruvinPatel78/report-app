@@ -22,7 +22,7 @@ import {
 import { NavMain } from "@/components/nav-main";
 import Image from "next/image";
 
-const sidebarData: any = {
+const sidebarData = {
   user: {
     name: "shadcn",
     email: "m@example.com",

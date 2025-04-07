@@ -4,22 +4,24 @@ import CardContainer from "@/components/CardContainer";
 import { Button } from "@/components/ui/button";
 import { Pencil, Plus, Save, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-
-const initialCards = [
+interface Cards {
+  id: number;
+  title: string;
+}
+const initialCards: Cards[] = [
   { id: 1, title: "Cover Page" },
   { id: 2, title: "Tab of Contents" },
   { id: 3, title: "PPC Report Summary" },
 ];
 
 const Dashboard = () => {
-  const [cards, setCards] = useState(initialCards);
+  const [cards, setCards] = useState<Cards[]>(initialCards);
   const [draggedCardId, setDraggedCardId] = useState(null);
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [newSection, setNewSection] = useState("");
-  const [currentId, setCurrentId] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
-  const [selectedContent, setSelectedContent] = useState(null);
+  const [currentId, setCurrentId] = useState<number>(null);
+  const [selectedContent, setSelectedContent] = useState<Cards>(null);
   const cardRefs = useRef([]);
   const [editTitle, setEditTitle] = useState("");
 
@@ -40,7 +42,7 @@ const Dashboard = () => {
           }
         : card,
     );
-    setSelectedContent((prevState: any) => ({
+    setSelectedContent((prevState: Cards) => ({
       ...prevState,
       title: editTitle,
     }));
@@ -69,8 +71,6 @@ const Dashboard = () => {
   };
 
   const handleCardClick = (id, key) => {
-    // setCurrentId(id);
-    // setSelectedId(id);
     const cardRef = cardRefs.current[key];
     if (cardRef) {
       cardRef.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -83,7 +83,7 @@ const Dashboard = () => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const number = Number(entry.target.id);
-          setCurrentId(number as any);
+          setCurrentId(number);
         }
       });
     });
@@ -97,7 +97,7 @@ const Dashboard = () => {
     return () => {
       observer.disconnect();
     };
-  }, [cards, selectedId]);
+  }, [cards]);
 
   return (
     <div className="flex flex-row bg-[#e7e9ed] h-screen">
@@ -137,15 +137,18 @@ const Dashboard = () => {
           </Button>
         </div>
       </div>
-      <div className="w-full h-screen overflow-auto flex flex-col gap-6 p-6" id={"content"}>
+      <div
+        className="w-full h-screen overflow-auto flex flex-col gap-6 p-6"
+        id={"content"}
+      >
         {cards.map((item, index) => (
           <div
             className="card bg-white w-full h-full p-4 min-h-screen cursor-pointer"
             key={item.id}
-            id={item.id as any}
+            id={item.id as string}
             ref={(el) => (cardRefs.current[index] = el)} // Assign ref to each card
             onClick={() => {
-              setSelectedContent(item as any);
+              setSelectedContent(item);
               setEditTitle(item.title);
             }}
           >
