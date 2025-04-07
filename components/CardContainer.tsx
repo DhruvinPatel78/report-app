@@ -26,7 +26,7 @@ const CardContainer: React.FC<CardContainerProps> = ({
 }) => {
   return (
     <div className="w-full overflow-auto">
-      {cards.map((card, index) => {
+      {cards.map((card:Card, index:number) => {
         return (
           <DraggableCard
             key={card.id}
