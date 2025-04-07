@@ -1,39 +1,42 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CardContainer from "@/components/CardContainer";
 import { Button } from "@/components/ui/button";
 import { Pencil, Plus, Save, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-interface Cards {
+
+interface Card {
   id: number;
   title: string;
 }
-const initialCards: Cards[] = [
+
+const initialCards: Card[] = [
   { id: 1, title: "Cover Page" },
   { id: 2, title: "Tab of Contents" },
   { id: 3, title: "PPC Report Summary" },
 ];
 
 const Dashboard = () => {
-  const [cards, setCards] = useState<Cards[]>(initialCards);
-  const [draggedCardId, setDraggedCardId] = useState<number>(null);
-  const [isAdd, setIsAdd] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [newSection, setNewSection] = useState("");
-  const [currentId, setCurrentId] = useState<number>(null);
-  const [selectedContent, setSelectedContent] = useState<Cards>(null);
-  const cardRefs = useRef([]);
-  const [editTitle, setEditTitle] = useState("");
+  const [cards, setCards] = useState<Card[]>(initialCards);
+  const [draggedCardId, setDraggedCardId] = useState<number | null>(null);
+  const [isAdd, setIsAdd] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [newSection, setNewSection] = useState<string>("");
+  const [currentId, setCurrentId] = useState<number | null>(null);
+  const [selectedContent, setSelectedContent] = useState<Card | null>(null);
+  const cardRefs = useRef<HTMLDivElement[]>([]);
+  const [editTitle, setEditTitle] = useState<string>("");
 
-  const onDragStart = (e, id) => {
+  const onDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
     setDraggedCardId(id);
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const onDragOver = (e) => {
+  const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
-  const editHandler = (id) => {
+
+  const editHandler = (id: number) => {
     const filteredCards = cards.map((card) =>
       card.id === id
         ? {
@@ -42,14 +45,14 @@ const Dashboard = () => {
           }
         : card,
     );
-    setSelectedContent((prevState: Cards) => ({
-      ...prevState,
-      title: editTitle,
-    }));
+    setSelectedContent((prevState) =>
+      prevState ? { ...prevState, title: editTitle } : null,
+    );
     setCards(filteredCards);
     setIsEdit(false);
   };
-  const onDrop = (e, id) => {
+
+  const onDrop = (e: React.DragEvent<HTMLDivElement>, id: number) => {
     e.preventDefault();
     const draggedCardIndex = cards.findIndex(
       (card) => card.id === draggedCardId,
@@ -70,7 +73,7 @@ const Dashboard = () => {
     setDraggedCardId(null);
   };
 
-  const handleCardClick = (id, key) => {
+  const handleCardClick = (id: number, key: number) => {
     const cardRef = cardRefs.current[key];
     if (cardRef) {
       cardRef.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -141,12 +144,12 @@ const Dashboard = () => {
         className="w-full h-screen overflow-auto flex flex-col gap-6 p-6"
         id={"content"}
       >
-        {cards.map((item, index) => (
+        {cards.map((item:Card, index:number) => (
           <div
             className="card bg-white w-full h-full p-4 min-h-screen cursor-pointer"
             key={item.id}
-            id={item.id as string}
-            ref={(el) => (cardRefs.current[index] = el)} // Assign ref to each card
+            id={item.id.toString()}
+            ref={(el) => (cardRefs.current[index] = el!)}
             onClick={() => {
               setSelectedContent(item);
               setEditTitle(item.title);
@@ -201,7 +204,7 @@ const Dashboard = () => {
                 variant="outline"
                 size="icon"
                 className={"cursor-pointer"}
-                onClick={() => editHandler(selectedContent.id)}
+                onClick={() => editHandler(selectedContent?.id as number)}
               >
                 <Save />
               </Button>
