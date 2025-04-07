@@ -149,7 +149,11 @@ const Dashboard = () => {
             className="card bg-white w-full h-full p-4 min-h-screen cursor-pointer"
             key={item.id}
             id={item.id.toString()}
-            ref={(el) => (cardRefs.current[index] = el!)}
+            ref={(el) => {
+              if (el) {
+                cardRefs.current[index] = el;
+              }
+            }}
             onClick={() => {
               setSelectedContent(item);
               setEditTitle(item.title);
