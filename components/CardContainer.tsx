@@ -1,5 +1,8 @@
 import DraggableCard from "./DraggableCard";
-
+interface Card {
+  id: number;
+  title: string;
+}
 const CardContainer = ({
   cards,
   onDragStart,
@@ -10,7 +13,7 @@ const CardContainer = ({
 }) => {
   return (
     <div className="w-full overflow-auto">
-      {cards.map((card, index) => {
+      {cards.map((card:Card, index:number) => {
         return (
           <DraggableCard
             key={card.id}
